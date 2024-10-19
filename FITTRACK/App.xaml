@@ -1,0 +1,25 @@
+﻿<Application x:Class="FITTRACK.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FITTRACK"
+             xmlns:viewModel="clr-namespace:FITTRACK.ViewModels" 
+             xmlns:view="clr-namespace:FITTRACK.Views"
+             >
+    <!--MainWindow.xaml-->
+
+    <Application.Resources>
+
+        <DataTemplate DataType="{x:Type TypeName=viewModel:SigninViewModel}">
+            <view:SigninView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type TypeName=viewModel:SignUpViewModel}">
+            <view:SignUpView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type TypeName=viewModel:ResetPasswordViewModel}">
+            <view:ResetPasswordView/>
+        </DataTemplate>
+
+    </Application.Resources>
+</Application>
