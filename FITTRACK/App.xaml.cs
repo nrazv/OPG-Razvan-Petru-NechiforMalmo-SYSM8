@@ -35,7 +35,7 @@ public partial class App : Application
         });
 
         services.AddSingleton<MainViewModel>();
-        services.AddSingleton<SigninViewModel>();
+        services.AddSingleton<SignInViewModel>();
         services.AddSingleton<SignUpViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDataService, InMemoryDataService>();

@@ -9,7 +9,7 @@
 
     <Application.Resources>
 
-        <DataTemplate DataType="{x:Type TypeName=viewModel:SigninViewModel}">
+        <DataTemplate DataType="{x:Type TypeName=viewModel:SignInViewModel}">
             <view:SigninView/>
         </DataTemplate>
 

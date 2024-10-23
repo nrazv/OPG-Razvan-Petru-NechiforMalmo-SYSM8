@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace FITTRACK.Models;
 
-public class CardioWorkout : Workout
+public class UserCredentials : Person
 {
 }

@@ -2,7 +2,6 @@
 namespace FITTRACK.Models;
 public class User : Person
 {
-    public override void SignIn()
-    {
-    }
+    public string Country { get; set; }
+    public UserSecurityQuestion SecurityQuestion { get; set; }
 }

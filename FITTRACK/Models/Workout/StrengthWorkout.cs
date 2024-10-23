@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FITTRACK.Models.Workout;
+namespace FITTRACK.Models;
 
 public class StrengthWorkout : Workout
 {

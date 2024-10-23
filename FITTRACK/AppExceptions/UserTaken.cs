@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FITTRACK.Models;
+namespace FITTRACK.AppExceptions;
 
-public class CardioWorkout : Workout
+public class UserTaken : Exception
 {
+    public UserTaken() : base("Username is taken") { }
 }
