@@ -70,6 +70,10 @@ public class SignInViewModel : ViewModelBase
             credentials.Password = Password;
 
             var user = _dataService.Login(credentials);
+            if (user is not null)
+            {
+                NavigationService.NavigateTo<UserViewModel>();
+            }
         }
         catch (UserNotFound e)
         {

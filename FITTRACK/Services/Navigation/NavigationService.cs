@@ -10,6 +10,17 @@ namespace FITTRACK.Services.Navigation;
 public class NavigationService : NotifyChanges, INavigationService
 {
     private ViewModelBase _currentView;
+    private ViewModelBase _nestedView;
+
+    public ViewModelBase NestedView
+    {
+        get => _nestedView;
+        set
+        {
+            _nestedView = value;
+            OnPropertyChanged();
+        }
+    }
 
     public ViewModelBase CurrentView
     {
@@ -29,5 +40,10 @@ public class NavigationService : NotifyChanges, INavigationService
     public void NavigateTo<ViewType>() where ViewType : ViewModelBase
     {
         CurrentView = _viewModelFactory.Invoke(typeof(ViewType));
+    }
+
+    public void NavigateToNestedView<ViewType>() where ViewType : ViewModelBase
+    {
+        NestedView = _viewModelFactory.Invoke(typeof(ViewType));
     }
 }

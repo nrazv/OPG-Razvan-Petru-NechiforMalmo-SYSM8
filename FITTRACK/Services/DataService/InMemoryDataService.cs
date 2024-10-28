@@ -8,6 +8,8 @@ namespace FITTRACK.Services.DataService;
 public class InMemoryDataService : IDataService
 {
     private readonly DataContext _context;
+    private User _authenticatedUser;
+    public User AuthenticatedUser { get => _authenticatedUser; set => _authenticatedUser = value; }
 
     public InMemoryDataService(DataContext context)
     {
@@ -59,7 +61,9 @@ public class InMemoryDataService : IDataService
         }
 
         User? user = userToLogin;
+        AuthenticatedUser = userToLogin;
         return user;
     }
+
 }
 

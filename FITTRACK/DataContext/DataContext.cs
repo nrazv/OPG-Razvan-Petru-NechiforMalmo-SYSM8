@@ -1,4 +1,5 @@
 ﻿using FITTRACK.Models;
+using System.Globalization;
 using System.Xml.Linq;
 
 
@@ -39,6 +40,63 @@ public class DataContext
         user.Country = "Romania";
         user.SecurityQuestion = new UserSecurityQuestion(_securityQuestions[0], "Avrig");
         Users.Add(user.UserName, user);
+
+
+
+        CardioWorkout cardioWorkout = new CardioWorkout();
+        cardioWorkout.TimeSpan = new TimeSpan(hours: 1, minutes: 10, seconds: 0);
+        cardioWorkout.CaloriesBurned = 200;
+        cardioWorkout.Notes = "Some Notes about this";
+        cardioWorkout.WorkoutType = WorkoutType.Cardio;
+        cardioWorkout.Date = new DateTime(year: 2024, month: 10, day: 5, hour: 12, minute: 20, second: 50);
+        cardioWorkout.Id = Guid.NewGuid();
+
+        user.AddWorkout(cardioWorkout);
+
+        StrengthWorkout strengthWorkout1 = new StrengthWorkout();
+        strengthWorkout1.Id = Guid.NewGuid();
+        strengthWorkout1.TimeSpan = new TimeSpan(hours: 0, minutes: 20, seconds: 0);
+        strengthWorkout1.CaloriesBurned = 700;
+        strengthWorkout1.WorkoutType = WorkoutType.Strength;
+        strengthWorkout1.Notes = "Some strength notes for 700";
+        strengthWorkout1.Date = new DateTime(year: 2024, month: 9, day: 8, hour: 14, minute: 20, second: 00);
+
+        user.AddWorkout(strengthWorkout1);
+
+        StrengthWorkout strengthWorkout2 = new StrengthWorkout();
+        strengthWorkout2.Id = Guid.NewGuid();
+        strengthWorkout2.TimeSpan = new TimeSpan(hours: 0, minutes: 30, seconds: 0);
+        strengthWorkout2.WorkoutType = WorkoutType.Strength;
+        strengthWorkout2.CaloriesBurned = 800;
+        strengthWorkout2.Notes = "Some strength notes for 700";
+        strengthWorkout2.Date = new DateTime(year: 2024, month: 10, day: 29, hour: 09, minute: 10, second: 00);
+
+        user.AddWorkout(strengthWorkout2);
+
+        CardioWorkout cardioWorkout1 = new CardioWorkout();
+        cardioWorkout1.TimeSpan = new TimeSpan(hours: 0, minutes: 35, seconds: 10);
+        cardioWorkout1.CaloriesBurned = 200;
+        cardioWorkout1.WorkoutType = WorkoutType.Cardio;
+        cardioWorkout1.Notes = "Some Notes about this This Cardio";
+        cardioWorkout1.Date = new DateTime(year: 2024, month: 10, day: 20, hour: 09, minute: 10, second: 00);
+        cardioWorkout1.Id = Guid.NewGuid();
+
+        user.AddWorkout(cardioWorkout1);
+
+
+        StrengthWorkout strengthWorkout = new StrengthWorkout();
+        strengthWorkout.Id = Guid.NewGuid();
+        strengthWorkout.WorkoutType = WorkoutType.Strength;
+        strengthWorkout.TimeSpan = new TimeSpan(hours: 0, minutes: 33, seconds: 0);
+        strengthWorkout.CaloriesBurned = 500;
+        strengthWorkout.Notes = "Some strength notes ";
+        strengthWorkout.Date = new DateTime(year: 2024, month: 10, day: 1, hour: 09, minute: 10, second: 00);
+
+
+
+        user.AddWorkout(strengthWorkout);
+
+
     }
 
     private void _createAdmin()

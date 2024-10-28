@@ -9,17 +9,33 @@
 
     <Application.Resources>
 
-        <DataTemplate DataType="{x:Type TypeName=viewModel:SignInViewModel}">
-            <view:SigninView/>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionaries\Color.xaml"/>
+                <ResourceDictionary Source="Dictionaries\Icons.xaml"/>
+                <ResourceDictionary Source="Dictionaries\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-        <DataTemplate DataType="{x:Type TypeName=viewModel:SignUpViewModel}">
-            <view:SignUpView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type TypeName=viewModel:SignInViewModel}">
+                <view:SigninView/>
+            </DataTemplate>
 
-        <DataTemplate DataType="{x:Type TypeName=viewModel:ResetPasswordViewModel}">
-            <view:ResetPasswordView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type TypeName=viewModel:SignUpViewModel}">
+                <view:SignUpView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type TypeName=viewModel:ResetPasswordViewModel}">
+                <view:ResetPasswordView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type TypeName=viewModel:UserViewModel}">
+                <view:UserView/>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+
+
 
     </Application.Resources>
 </Application>

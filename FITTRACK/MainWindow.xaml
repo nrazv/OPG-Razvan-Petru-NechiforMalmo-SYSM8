@@ -5,8 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FITTRACK"
         mc:Ignorable="d"
-        Title="FitTrack" Height="600" Width="600">
-    <Grid>
-        <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding NavigationService.CurrentView}"></ContentControl>
-    </Grid>
+        Title="FitTrack" >
+    <ContentControl Width="Auto" Height="Auto" Content="{Binding NavigationService.CurrentView}"></ContentControl>
 </Window>

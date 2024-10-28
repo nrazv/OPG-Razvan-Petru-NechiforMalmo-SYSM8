@@ -3,6 +3,7 @@ using FITTRACK.MVVM;
 using FITTRACK.Services.DataService;
 using FITTRACK.Services.Navigation;
 using FITTRACK.ViewModels;
+using FITTRACK.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
@@ -34,9 +35,12 @@ public partial class App : Application
             DataContext = provider.GetService<MainViewModel>()
         });
 
+
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<SignInViewModel>();
         services.AddSingleton<SignUpViewModel>();
+        services.AddSingleton<UserViewModel>();
+        services.AddSingleton<ResetPasswordViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDataService, InMemoryDataService>();
         services.AddSingleton<DataContext>();

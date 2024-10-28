@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FITTRACK.Models;
 
-public class StrengthWorkout : Workout
+public enum WorkoutType
 {
-
+    Cardio, Strength
 }

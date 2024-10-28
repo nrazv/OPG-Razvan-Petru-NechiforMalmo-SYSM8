@@ -18,9 +18,6 @@ public class MainViewModel : ViewModelBase
 
     }
 
-
-
-
     public MainViewModel(INavigationService navigationService)
     {
         NavigationService = navigationService;
