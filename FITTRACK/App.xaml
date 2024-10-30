@@ -32,10 +32,15 @@
                 <view:UserView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type TypeName=viewModel:UserProfileViewModel}">
+                <view:UserProfileView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type TypeName=viewModel:WorkoutsViewModel}">
+                <view:WorkoutsView/>
+            </DataTemplate>
+
         </ResourceDictionary>
-
-
-
 
     </Application.Resources>
 </Application>

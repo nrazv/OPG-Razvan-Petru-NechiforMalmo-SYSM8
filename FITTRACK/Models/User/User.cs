@@ -12,6 +12,8 @@ public class User : Person
     public string Country { get; set; } = string.Empty;
     public UserSecurityQuestion SecurityQuestion { get; set; }
 
+    public Workout? WorkoutAsTemplate { get; set; }
+
     public User()
     {
         _workouts = new ObservableCollection<Workout>();

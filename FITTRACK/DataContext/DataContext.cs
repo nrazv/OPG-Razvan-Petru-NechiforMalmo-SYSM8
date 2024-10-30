@@ -35,10 +35,11 @@ public class DataContext
     private void createDefaultUser()
     {
         User user = new User();
+        user.Id = Guid.NewGuid();
         user.UserName = "razvan";
         user.Password = "password22!";
         user.Country = "Romania";
-        user.SecurityQuestion = new UserSecurityQuestion(_securityQuestions[0], "Avrig");
+        user.SecurityQuestion = new UserSecurityQuestion(_securityQuestions[0], "T-Rex");
         Users.Add(user.UserName, user);
 
 
@@ -59,7 +60,7 @@ public class DataContext
         strengthWorkout1.CaloriesBurned = 700;
         strengthWorkout1.WorkoutType = WorkoutType.Strength;
         strengthWorkout1.Notes = "Some strength notes for 700";
-        strengthWorkout1.Date = new DateTime(year: 2024, month: 9, day: 8, hour: 14, minute: 20, second: 00);
+        strengthWorkout1.Date = new DateTime(year: 2024, month: 10, day: 8, hour: 14, minute: 20, second: 00);
 
         user.AddWorkout(strengthWorkout1);
 

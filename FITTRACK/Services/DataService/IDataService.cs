@@ -6,6 +6,7 @@ public interface IDataService
 {
     public bool AddUser(Person person);
     public User? Login(UserCredentials credentials);
+    public void LogOut();
     public User GetByUserName(string userName);
     public List<SecurityQuestion> GetSecurityQuestions();
     public List<string> Countries();

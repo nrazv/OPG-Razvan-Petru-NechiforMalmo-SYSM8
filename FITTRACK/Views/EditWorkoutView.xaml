@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="FITTRACK.Views.EditWorkoutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FITTRACK.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <local:EnumToStringConverter x:Key="EnumToStringConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="150"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+            <Label  Content="Burned Calories :" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding SelectedWorkout.CaloriesBurned}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="Light" Width="50"/>
+        </StackPanel>
+
+        <ComboBox Grid.Row="0" Margin="10" HorizontalAlignment="Right" Height="25" VerticalAlignment="Center"
+                  ItemsSource="{Binding WorkoutTypes}" SelectedItem="{Binding SelectedWorkout.WorkoutType, Converter={StaticResource EnumToStringConverter}}">
+        </ComboBox>
+
+        <StackPanel Grid.Row="1" Margin="10">
+            <Label  Content="Notes" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox TextWrapping="Wrap" Text="{Binding SelectedWorkout.Notes}" Margin="5 0" Height="100"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel  Margin="10" Grid.Column="0">
+                <Label  Content="Duration" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <StackPanel  Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBox Margin="10" Padding="5" x:Name="HoursTextBox"  Text="{Binding SelectedWorkout.TimeSpan}" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel  Margin="10" Grid.Column="1">
+                <Label  Content="Date" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <DatePicker x:Name="DatePickerControl" SelectedDate="{Binding SelectedWorkout.Date}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Button Grid.Row="3" 
+            Content="Save" 
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom" Margin="15" 
+            BorderBrush="Transparent" Height="25" Width="100" 
+            Background="#008000" 
+            Foreground="White"
+            Command="{Binding SaveWorkoutChangesCommand}"
+            />
+    </Grid>
+</UserControl>

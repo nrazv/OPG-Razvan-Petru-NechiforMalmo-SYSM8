@@ -2,12 +2,11 @@
 using FITTRACK.MVVM;
 using FITTRACK.Services.DataService;
 using FITTRACK.Views;
-using System;
-using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -25,10 +24,14 @@ public class AddWorkoutWindowViewMode : ViewModelBase
     private string _notes = string.Empty;
     private WorkoutType _workoutType;
 
+
     public RelayCommand AddWorkoutCommand { get; set; }
+    public RelayCommand PastTemplateCommand { get; set; }
+
 
     public ObservableCollection<WorkoutType> WorkoutTypes { get; set; }
 
+    [Required]
     public DateTime Date
     {
         get => _date;
@@ -39,12 +42,59 @@ public class AddWorkoutWindowViewMode : ViewModelBase
         }
     }
 
-    public int Minutes { get => _minutes; set { _minutes = value; OnPropertyChanged(); } }
-    public int Hours { get => _hours; set { _hours = value; OnPropertyChanged(); } }
-    public int Seconds { get => _seconds; set { _seconds = value; OnPropertyChanged(); } }
+    [Required]
+    public int Minutes
+    {
+        get => _minutes;
+        set
+        {
+            _minutes = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [Required]
+    public int Hours
+    {
+        get => _hours;
+        set
+        {
+            _hours = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [Required]
+    public int Seconds
+    {
+        get => _seconds;
+        set
+        {
+            _seconds = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [Required]
     public Duration TimeSpan { get => _timeSpan; set { _timeSpan = value; OnPropertyChanged(); } }
-    public int CaloriesBurned { get => _caloriesBurned; set { _caloriesBurned = value; OnPropertyChanged(); } }
+
+    [Required]
+    [Range(1, 99999)]
+    public int CaloriesBurned
+    {
+        get => _caloriesBurned;
+        set
+        {
+            _caloriesBurned = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [Required]
+    [MinLength(5)]
     public string Notes { get => _notes; set { _notes = value; OnPropertyChanged(); } }
+
+    [Required]
     public WorkoutType WorkoutType { get => _workoutType; set { _workoutType = value; OnPropertyChanged(); } }
 
 
@@ -53,12 +103,38 @@ public class AddWorkoutWindowViewMode : ViewModelBase
         WorkoutTypes = new ObservableCollection<WorkoutType> { WorkoutType.Cardio, WorkoutType.Strength };
         AddWorkoutCommand = new RelayCommand(execute: addNewWorkout, canExecute: e => true);
         _dataService = (InMemoryDataService)dataService;
+        PastTemplateCommand = new RelayCommand(execute: setWorkoutTemplate, canExecute: e =>
+        {
+            if (_dataService.AuthenticatedUser is not null)
+            {
+                return _dataService.AuthenticatedUser.WorkoutAsTemplate is not null;
+            }
+
+            return false;
+        });
     }
 
+    private void setWorkoutTemplate(object obj)
+    {
+        var workoutTemplate = _dataService.AuthenticatedUser.WorkoutAsTemplate;
+        Date = workoutTemplate.Date.Date;
+        Notes = workoutTemplate.Notes;
+        CaloriesBurned = workoutTemplate.CaloriesBurned;
+        Minutes = workoutTemplate.TimeSpan.TimeSpan.Minutes;
+        Hours = workoutTemplate.TimeSpan.TimeSpan.Hours;
+        Seconds = workoutTemplate.TimeSpan.TimeSpan.Seconds;
+        WorkoutType = workoutTemplate.WorkoutType;
+    }
 
 
     private void addNewWorkout(object obj)
     {
+        validateWorkout();
+
+        if (Errors.Any())
+        {
+            return;
+        }
 
         Workout workout = new Workout();
         workout.Id = Guid.NewGuid();
@@ -73,4 +149,17 @@ public class AddWorkoutWindowViewMode : ViewModelBase
         Window addWorkoutWindow = (AddWorkoutWindowView)obj;
         addWorkoutWindow.Close();
     }
+
+
+    private void validateWorkout()
+    {
+        Validate(nameof(CaloriesBurned), CaloriesBurned);
+        Validate(nameof(Date), Date);
+        Validate(nameof(Date), Date);
+        Validate(nameof(Hours), Hours);
+        Validate(nameof(Minutes), Minutes);
+        Validate(nameof(Seconds), Seconds);
+        Validate(nameof(WorkoutType), WorkoutType);
+    }
+
 }

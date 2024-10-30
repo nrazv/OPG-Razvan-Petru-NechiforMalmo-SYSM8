@@ -18,16 +18,16 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
             <Label  Content="Burned Calories :" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding CaloriesBurned}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="Light" Width="50"/>
+            <TextBox Text="{Binding CaloriesBurned, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="Light" Width="50"/>
         </StackPanel>
 
         <ComboBox Grid.Row="0" Margin="10" HorizontalAlignment="Right" Height="25" VerticalAlignment="Center"
-                  ItemsSource="{Binding WorkoutTypes}" SelectedItem="{Binding WorkoutType}">
+                  ItemsSource="{Binding WorkoutTypes}" SelectedItem="{Binding WorkoutType, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
         </ComboBox>
 
         <StackPanel Grid.Row="1" Margin="10">
             <Label  Content="Notes" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox TextWrapping="Wrap" Text="{Binding Notes}" Margin="5 0" Height="100"/>
+            <TextBox TextWrapping="Wrap" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Margin="5 0" Height="100"/>
         </StackPanel>
 
         <Grid Grid.Row="2">
@@ -40,18 +40,18 @@
                 <Label  Content="Duration" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <StackPanel  Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="H :" FontWeight="DemiBold" VerticalAlignment="Center" Margin="5,0"/>
-                    <TextBox x:Name="HoursTextBox" Width="40" Text="{Binding Hours}" />
+                    <TextBox x:Name="HoursTextBox" Width="40" Text="{Binding Hours, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
                     <TextBlock Text="M :" FontWeight="DemiBold" Margin="5,0"/>
-                    <TextBox x:Name="MinutesTextBox" Width="40" Text="{Binding Minutes}"  />
+                    <TextBox x:Name="MinutesTextBox" Width="40" Text="{Binding Minutes, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  />
                     <TextBlock Text="S :" FontWeight="DemiBold" Margin="5,0"/>
-                    <TextBox x:Name="SecondsTextBox" Width="40" Text="{Binding Seconds}" />
+                    <TextBox x:Name="SecondsTextBox" Width="40" Text="{Binding Seconds, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
                 </StackPanel>
             </StackPanel>
 
             <StackPanel  Margin="10" Grid.Column="1">
                 <Label  Content="Date" FontSize="15" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <DatePicker x:Name="DatePickerControl" SelectedDate="{Binding Date}"/>
+                    <DatePicker x:Name="DatePickerControl" SelectedDate="{Binding Date, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -66,6 +66,11 @@
             Command="{Binding AddWorkoutCommand}"
             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
             />
+
+        <Button Grid.Row="3" Content="Past Template" VerticalAlignment="Bottom" Margin="15" BorderBrush="Transparent" Height="25" Width="100" 
+                            Background="#ecf02e" 
+                            Foreground="#47473e"
+                            Command="{Binding PastTemplateCommand}" />
     </Grid>
 
 </Window>

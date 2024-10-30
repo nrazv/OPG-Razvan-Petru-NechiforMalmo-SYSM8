@@ -195,6 +195,7 @@ public class SignUpViewModel : ViewModelBase, INotifyDataErrorInfo
         bool userCreated = false;
         var user = new User()
         {
+            Id = Guid.NewGuid(),
             UserName = UserName,
             Password = Password,
             Country = Country,

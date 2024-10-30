@@ -65,5 +65,9 @@ public class InMemoryDataService : IDataService
         return user;
     }
 
+    public void LogOut()
+    {
+        AuthenticatedUser = null;
+    }
 }
 
