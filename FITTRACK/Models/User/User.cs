@@ -24,7 +24,8 @@ public class User : Person
         _workouts.Add(workout);
     }
 
-    public void DeleteWorkout(Guid id)
+    public void DeleteWorkout(Workout workout)
     {
+        _workouts.Remove(workout);
     }
 }

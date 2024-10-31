@@ -20,6 +20,8 @@ public class SignInViewModel : ViewModelBase
 
     public RelayCommand NavigateToSignUp { get; set; }
     public RelayCommand LoginCommand { get; set; }
+    public RelayCommand ForgotPasswordCommand { get; set; }
+
 
     public string UserName
     {
@@ -59,6 +61,7 @@ public class SignInViewModel : ViewModelBase
         _dataService = dataService;
         NavigateToSignUp = _createNavigateToSignUp();
         LoginCommand = _createLoginCommand();
+        ForgotPasswordCommand = _createForgotPasswordCommand();
     }
 
     private void _login()
@@ -111,6 +114,16 @@ public class SignInViewModel : ViewModelBase
                 _login();
             },
             canExecute: _ => Validator.TryValidateObject(this, new ValidationContext(this), null) && !Errors.Any());
+    }
+
+    private RelayCommand _createForgotPasswordCommand()
+    {
+        return new RelayCommand(
+            execute: _ =>
+            {
+                NavigationService.NavigateTo<ResetPasswordViewModel>();
+            },
+            canExecute: _ => true);
     }
 
 }

@@ -7,12 +7,12 @@ namespace FITTRACK.Data;
 
 public class DataContext
 {
-    private readonly Dictionary<string, Person> _userDataContext = new();
+    private readonly Dictionary<Guid, User> _userDataContext = new();
     private readonly List<SecurityQuestion> _securityQuestions = new();
     private List<string> _conutriesList;
     public List<string> CountriesList { get => _conutriesList; }
     public List<SecurityQuestion> SecurityQuestions { get => _securityQuestions; }
-    public Dictionary<string, Person> Users { get => _userDataContext; }
+    public Dictionary<Guid, User> Users { get => _userDataContext; }
 
     public DataContext()
     {
@@ -36,11 +36,11 @@ public class DataContext
     {
         User user = new User();
         user.Id = Guid.NewGuid();
-        user.UserName = "razvan";
+        user.UserName = "user";
         user.Password = "password22!";
         user.Country = "Romania";
         user.SecurityQuestion = new UserSecurityQuestion(_securityQuestions[0], "T-Rex");
-        Users.Add(user.UserName, user);
+        Users.Add(user.Id, user);
 
 
 
@@ -103,7 +103,8 @@ public class DataContext
     private void _createAdmin()
     {
         var admin = new Admin() { UserName = "admin", Password = "password" };
-        _userDataContext.Add(admin.UserName, admin);
+        admin.Id = Guid.NewGuid();
+        _userDataContext.Add(admin.Id, admin);
     }
 
 

@@ -1,5 +1,7 @@
-﻿using FITTRACK.Models;
+﻿using FITTRACK.AppExceptions;
+using FITTRACK.Models;
 using FITTRACK.MVVM;
+using FITTRACK.MVVM.Validation;
 using FITTRACK.Services.DataService;
 using System;
 using System.Collections;
@@ -10,44 +12,89 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace FITTRACK.ViewModels;
 
 public class UserProfileViewModel : ViewModelBase
 {
-    private InMemoryDataService _dataService;
-    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    public Dictionary<string, List<string>> Errors = new Dictionary<string, List<string>>();
-    public bool HasErrors => Errors.Any();
-    public ObservableCollection<string> Countries { get; }
-    public ObservableCollection<SecurityQuestion> SecurityQuestions { get; }
     private User _authenticatedUser;
+    private InMemoryDataService _dataService;
+    public ObservableCollection<string> Countries { get; }
 
-    private bool _editInfoOff = true;
     private string _userName = string.Empty;
     private string _password = string.Empty;
     private string _passwordConfirmation = string.Empty;
     private string _country = string.Empty;
-    private string _questionAnswer = string.Empty;
-    private SecurityQuestion _question;
+    private Visibility _editInfoOn = Visibility.Collapsed;
+    private bool _canEdit = false;
 
-    public bool EditInfo { get => _editInfoOff; set { _editInfoOff = value; OnPropertyChanged(); } }
-    public string UserName { get => _userName; set { _userName = value; OnPropertyChanged(); } }
-    public string Password { get => _password; set { _password = value; OnPropertyChanged(); } }
-    public string PasswordConfirmation { get => _passwordConfirmation; set { _passwordConfirmation = value; OnPropertyChanged(); } }
-
-
-    [Required(ErrorMessage = "A answer is required")]
-    public string QuestionAnswer
+    public User AuthenticatedUser
     {
-        get => _questionAnswer;
+        get => _authenticatedUser;
         set
         {
-            _questionAnswer = value;
-            Validate(nameof(QuestionAnswer), value);
+            _authenticatedUser = value;
+
             OnPropertyChanged();
         }
     }
+
+    public string UserName
+    {
+        get => _userName;
+        set { _userName = value; OnPropertyChanged(); }
+    }
+
+    [PasswordValidation]
+    public string Password
+    {
+        get => _password;
+        set
+        {
+            _password = value;
+            Validate(nameof(Password), value);
+
+            OnPropertyChanged();
+        }
+    }
+
+    [PasswordValidation]
+    public string PasswordConfirmation
+    {
+        get => _passwordConfirmation;
+        set
+        {
+            _passwordConfirmation = value;
+            Validate(nameof(PasswordConfirmation), value);
+            OnPropertyChanged();
+        }
+    }
+
+    public bool CanEdit
+    {
+        get => _canEdit;
+        set
+        {
+            _canEdit = value;
+            if (_canEdit is true)
+            {
+            }
+            OnPropertyChanged();
+        }
+    }
+
+    public Visibility EditInfoOn
+    {
+        get => _editInfoOn;
+        set
+        {
+            _editInfoOn = value;
+            OnPropertyChanged();
+        }
+    }
+
+
 
     [Required(ErrorMessage = "Country is required")]
     public string Country
@@ -61,30 +108,36 @@ public class UserProfileViewModel : ViewModelBase
         }
     }
 
-    [Required]
-    public SecurityQuestion Question
-    {
-        get => _question;
-        set
-        {
-            _question = value;
-            OnPropertyChanged();
-        }
-    }
 
 
-
+    public RelayCommand EnableEditCommand { get; set; }
+    public RelayCommand CancelCommand { get; set; }
+    public RelayCommand UpdateUserCommand { get; set; }
 
 
     public UserProfileViewModel(IDataService dataService)
     {
         _dataService = (InMemoryDataService)dataService;
         _authenticatedUser = _dataService.AuthenticatedUser;
-        SecurityQuestions = new ObservableCollection<SecurityQuestion>(_dataService.GetSecurityQuestions());
         Countries = new ObservableCollection<string>(_dataService.Countries());
         setUserData();
+        EnableEditCommand = new RelayCommand(execute: e => enableEditMode(), canExecute: e => true);
+        CancelCommand = new RelayCommand(execute: e => disableEditMode(), canExecute: e => true);
+        UpdateUserCommand = new RelayCommand(execute: e => saveChanges(), canExecute: e => true);
     }
 
+
+    private void enableEditMode()
+    {
+        CanEdit = true;
+        EditInfoOn = Visibility.Visible;
+    }
+
+    private void disableEditMode()
+    {
+        CanEdit = false;
+        EditInfoOn = Visibility.Collapsed;
+    }
 
 
     public new IEnumerable GetErrors(string? propertyName)
@@ -103,15 +156,79 @@ public class UserProfileViewModel : ViewModelBase
     private void setUserData()
     {
         _userName = _authenticatedUser.UserName;
-        _password = _authenticatedUser.Password;
         _country = _authenticatedUser.Country;
-        _question = _authenticatedUser.SecurityQuestion.Question;
-        _questionAnswer = _authenticatedUser.SecurityQuestion.Answer;
     }
 
     private void saveChanges()
     {
+        User user;
+        try
+        {
 
+            user = _dataService.GetByUserName(UserName);
+
+            if (user is not null && user.UserName != _authenticatedUser.UserName)
+            {
+                Errors["UserName"] = new List<string>() { "Username is taken" };
+                NotifyErrorsChanged("UserName");
+                return;
+            }
+
+
+        }
+        catch (UserNotFound ex)
+        {
+            Errors.Remove("UserName");
+            NotifyErrorsChanged("UserName");
+            user = _dataService.GetByUserName(_authenticatedUser.UserName);
+        }
+
+        if (!string.Equals(Password, PasswordConfirmation))
+        {
+            Errors["PasswordConfirmation"] = new List<string>() { "Passwords don't match" };
+            NotifyErrorsChanged("PasswordConfirmation");
+            return;
+        }
+
+        else
+        {
+
+            if (!string.IsNullOrEmpty(Password))
+            {
+                _authenticatedUser.Password = Password;
+                user.Password = Password;
+
+            }
+
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                user.UserName = UserName;
+                _authenticatedUser.UserName = UserName;
+            }
+
+
+            _authenticatedUser.Country = Country;
+            user.Country = Country;
+
+            _authenticatedUser = _dataService.UpdateUser(user);
+
+            Password = string.Empty;
+            PasswordConfirmation = string.Empty;
+
+            Errors.Remove("Password");
+            NotifyErrorsChanged("Password");
+
+            Errors.Remove("PasswordConfirmation");
+            NotifyErrorsChanged("PasswordConfirmation");
+
+
+            disableEditMode();
+        }
     }
 
+    internal void UpdateData()
+    {
+        _authenticatedUser = _dataService.AuthenticatedUser;
+        UserName = AuthenticatedUser.UserName;
+    }
 }

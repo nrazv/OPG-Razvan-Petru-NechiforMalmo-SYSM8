@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -51,9 +52,16 @@
                 Command="{Binding LoginCommand}"
                 />
 
+        <Button Grid.Row="4" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Forgot your password ?"  
+             Background="Transparent" Padding="5" 
+             Margin="0 20"
+             BorderThickness="0" 
+             Command="{Binding ForgotPasswordCommand}"
+             />
 
-        <Label Grid.Row="4" Grid.Column="0"  Content="Don't have an account?" VerticalAlignment="Center"/>
-        <Button Grid.Row="4" 
+
+        <Label Grid.Row="5" Grid.Column="0"  Content="Don't have an account?" VerticalAlignment="Center"/>
+        <Button Grid.Row="5" 
                  Grid.Column="1"
                  Height="30" 
                  Margin="0 30 0 30"

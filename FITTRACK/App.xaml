@@ -40,6 +40,10 @@
                 <view:WorkoutsView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type TypeName=viewModel:AdminWorkoutsViewModel}">
+                <view:AdminWorkoutsView/>
+            </DataTemplate>
+
         </ResourceDictionary>
 
     </Application.Resources>

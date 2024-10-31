@@ -39,11 +39,12 @@ public partial class App : Application
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<SignInViewModel>();
         services.AddSingleton<SignUpViewModel>();
-        services.AddScoped<UserViewModel>();
+        services.AddSingleton<UserViewModel>();
         services.AddSingleton<ResetPasswordViewModel>();
-        services.AddScoped<UserProfileViewModel>();
-        services.AddScoped<WorkoutsViewModel>();
-        services.AddScoped<AddWorkoutWindowViewMode>();
+        services.AddSingleton<UserProfileViewModel>();
+        services.AddSingleton<WorkoutsViewModel>();
+        services.AddSingleton<AddWorkoutWindowViewMode>();
+        services.AddSingleton<AdminWorkoutsViewModel>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDataService, InMemoryDataService>();
         services.AddSingleton<DataContext>();

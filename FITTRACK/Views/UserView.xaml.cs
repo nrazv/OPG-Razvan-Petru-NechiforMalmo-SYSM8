@@ -1,4 +1,7 @@
-﻿using System;
+﻿using FITTRACK.Models;
+using FITTRACK.Services.DataService;
+using FITTRACK.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,15 +26,13 @@ public partial class UserView : UserControl
     public UserView()
     {
         InitializeComponent();
+        this.Loaded += LoadData;
     }
-
-    private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void LoadData(object sender, RoutedEventArgs e)
     {
-
-    }
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-
+        if (this.DataContext is UserViewModel viewModel)
+        {
+            viewModel.setView();
+        }
     }
 }

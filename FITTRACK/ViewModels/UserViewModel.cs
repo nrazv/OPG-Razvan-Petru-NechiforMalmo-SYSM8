@@ -15,7 +15,7 @@ namespace FITTRACK.ViewModels;
 public class UserViewModel : ViewModelBase
 {
     private INavigationService _navigationService;
-    private IDataService _dataService;
+    private InMemoryDataService _dataService;
 
     public INavigationService NavigationService
     {
@@ -35,8 +35,7 @@ public class UserViewModel : ViewModelBase
     public UserViewModel(INavigationService navigationService, IDataService dataService)
     {
         NavigationService = navigationService;
-        NavigationService.NavigateToNestedView<WorkoutsViewModel>();
-        _dataService = dataService;
+        _dataService = (InMemoryDataService)dataService;
         createNavigationCommands();
     }
 
@@ -52,6 +51,29 @@ public class UserViewModel : ViewModelBase
     {
         _dataService.LogOut();
         NavigationService.NavigateTo<SignInViewModel>();
+    }
+
+    public void setView()
+    {
+        if (_dataService.AuthenticatedUser is Admin)
+        {
+            setAdminView();
+        }
+        else
+        {
+            seUserView();
+        }
+
+    }
+
+    private void seUserView()
+    {
+        NavigationService.NavigateToNestedView<WorkoutsViewModel>();
+    }
+
+    private void setAdminView()
+    {
+        NavigationService.NavigateToNestedView<AdminWorkoutsViewModel>();
     }
 }
 

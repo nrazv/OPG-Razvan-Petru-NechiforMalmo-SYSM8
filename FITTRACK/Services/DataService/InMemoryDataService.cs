@@ -2,31 +2,38 @@
 using FITTRACK.Data;
 using FITTRACK.AppExceptions;
 using System.Linq;
+using System;
+using FITTRACK.Services.Navigation;
+using System.Collections.ObjectModel;
 
 namespace FITTRACK.Services.DataService;
 
 public class InMemoryDataService : IDataService
 {
-    private readonly DataContext _context;
+    private INavigationService _navigationService;
+    private DataContext _context;
     private User _authenticatedUser;
     public User AuthenticatedUser { get => _authenticatedUser; set => _authenticatedUser = value; }
 
-    public InMemoryDataService(DataContext context)
+    public InMemoryDataService(DataContext context, INavigationService navigationService)
     {
+        _navigationService = navigationService;
         _context = context;
     }
 
-    public bool AddUser(Person person)
+    public bool AddUser(User person)
     {
-        var userExists = _context.Users.ContainsKey(person.UserName);
+        var userExists = _context.Users.Where(u => u.Value.UserName == person.UserName);
 
-        if (userExists)
+
+
+        if (userExists.Any())
         {
             throw new UserTaken();
         }
         else
         {
-            _context.Users.Add(person.UserName, person);
+            _context.Users.Add(person.Id, person);
         }
 
         return true;
@@ -39,14 +46,14 @@ public class InMemoryDataService : IDataService
 
     public User GetByUserName(string username)
     {
-        _context.Users.TryGetValue(username, out var user);
+        var user = _context.Users.Where(u => u.Value.UserName == username);
 
-        if (user is null)
+        if (!user.Any())
         {
             throw new UserNotFound();
         }
 
-        return (User)user;
+        return (User)user.First().Value;
     }
 
     public List<SecurityQuestion> GetSecurityQuestions() => _context.SecurityQuestions;
@@ -61,6 +68,8 @@ public class InMemoryDataService : IDataService
         }
 
         User? user = userToLogin;
+
+
         AuthenticatedUser = userToLogin;
         return user;
     }
@@ -69,5 +78,38 @@ public class InMemoryDataService : IDataService
     {
         AuthenticatedUser = null;
     }
+
+    public User UpdateUser(User user)
+    {
+
+
+        var userToUpdate = (User)_context.Users.Where(u => u.Value.Id == user.Id).First().Value;
+        userToUpdate.UserName = user.UserName;
+        userToUpdate.Password = user.Password;
+        userToUpdate.Country = user.Country;
+
+
+        _context.Users[user.Id] = userToUpdate;
+
+        return (User)_context.Users.Where(u => u.Value.Id == user.Id).First().Value;
+    }
+
+    public List<User> AllUsers()
+    {
+        List<User> users = new List<User>();
+
+        foreach (var item in _context.Users.AsEnumerable())
+        {
+            users.Add(item.Value as User);
+        }
+
+        return users;
+    }
+
+    public void DeleteUserWorkout(Workout workout, string userName)
+    {
+        _context.Users.Where(u => u.Value.UserName == userName).First().Value.DeleteWorkout(workout);
+    }
+
 }
 

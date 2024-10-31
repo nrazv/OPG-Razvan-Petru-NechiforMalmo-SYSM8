@@ -1,5 +1,4 @@
-﻿using FITTRACK.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,21 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FITTRACK.Views;
-
-public partial class UserProfileView : UserControl
+namespace FITTRACK.Views
 {
-    public UserProfileView()
+    /// <summary>
+    /// Interaction logic for AdminWorkoutListItem.xaml
+    /// </summary>
+    public partial class AdminWorkoutListItem : UserControl
     {
-        InitializeComponent();
-        this.Loaded += LoadData;
-
-    }
-    private void LoadData(object sender, RoutedEventArgs e)
-    {
-        if (this.DataContext is UserProfileViewModel viewModel)
+        public AdminWorkoutListItem()
         {
-            viewModel.UpdateData();
+            InitializeComponent();
         }
     }
 }

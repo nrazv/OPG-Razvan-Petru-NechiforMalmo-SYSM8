@@ -1,7 +1,7 @@
 ﻿
 namespace FITTRACK.Models;
 
-class Admin : Person
+class Admin : User
 {
 
 }
