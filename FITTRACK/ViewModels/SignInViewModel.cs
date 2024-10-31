@@ -7,6 +7,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 
 namespace FITTRACK.ViewModels;
@@ -17,10 +18,55 @@ public class SignInViewModel : ViewModelBase
     private IDataService _dataService;
     private string _userName = string.Empty;
     private string _password = string.Empty;
+    private int _twfCode;
+    private int _userTWFCode;
+    private Visibility twfEnabled = Visibility.Collapsed;
+    private Visibility twfModeOff = Visibility.Visible;
+
+    public Visibility TWFEnabled
+    {
+        get => twfEnabled;
+        set
+        {
+            twfEnabled = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public Visibility TWFModeOff
+    {
+        get => twfModeOff;
+        set
+        {
+            twfModeOff = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int TWFCode
+    {
+        get => _twfCode;
+        set
+        {
+            _twfCode = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int UserTWFCode
+    {
+        get => _userTWFCode;
+        set
+        {
+            _userTWFCode = value;
+            OnPropertyChanged();
+        }
+    }
 
     public RelayCommand NavigateToSignUp { get; set; }
     public RelayCommand LoginCommand { get; set; }
     public RelayCommand ForgotPasswordCommand { get; set; }
+    public RelayCommand TWFCommand { get; set; }
 
 
     public string UserName
@@ -62,6 +108,7 @@ public class SignInViewModel : ViewModelBase
         NavigateToSignUp = _createNavigateToSignUp();
         LoginCommand = _createLoginCommand();
         ForgotPasswordCommand = _createForgotPasswordCommand();
+        TWFCommand = new RelayCommand(execute: e => { verify2WF(); }, canExecute: e => true);
     }
 
     private void _login()
@@ -75,7 +122,9 @@ public class SignInViewModel : ViewModelBase
             var user = _dataService.Login(credentials);
             if (user is not null)
             {
-                NavigationService.NavigateTo<UserViewModel>();
+                TWFModeOff = Visibility.Collapsed;
+                TWFEnabled = Visibility.Visible;
+                twfAutentication();
             }
         }
         catch (UserNotFound e)
@@ -126,4 +175,45 @@ public class SignInViewModel : ViewModelBase
             canExecute: _ => true);
     }
 
+
+    private void twfAutentication()
+    {
+        TWFCode = generateCode();
+        displayCode(TWFCode);
+    }
+
+    private void verify2WF()
+    {
+        if (UserTWFCode == TWFCode)
+        {
+            Errors.Clear();
+
+
+            TWFModeOff = Visibility.Visible;
+            TWFEnabled = Visibility.Collapsed;
+            UserTWFCode = 0;
+            NavigationService.NavigateTo<UserViewModel>();
+        }
+        else
+        {
+            Errors["UserTWFCode"] = new List<string>() { "Invalid code" };
+            NotifyErrorsChanged("UserTWFCode");
+        }
+    }
+
+
+
+    private void displayCode(int twfCode)
+    {
+        string messageBoxText = $"2FA Code: {twfCode}";
+        string caption = "2FA Code";
+        MessageBoxImage icon = MessageBoxImage.Information;
+        MessageBoxResult result = MessageBox.Show(messageBoxText, caption);
+    }
+
+    private int generateCode()
+    {
+        Random random = new Random();
+        return random.Next(100000, 1000000);
+    }
 }

@@ -13,6 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -24,9 +25,9 @@
 
         <Label Grid.Row="0"  Grid.ColumnSpan="2" Content="Fit - Track" FontFamily="Arial" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" Margin="20"/>
 
-        <Label Grid.Row="1" Grid.Column="0" Content="Username:" Style="{StaticResource Header}"/>
-        <TextBox x:Name="usernameTextBox" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Width="150" Margin="10"/>
-        <TextBlock Foreground="Red" Grid.Row="0" Grid.ColumnSpan="2"  FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="45,-7">
+        <Label Grid.Row="1" Grid.Column="0" Content="Username:" Style="{StaticResource Header}"  Visibility="{Binding TWFModeOff}"/>
+        <TextBox x:Name="usernameTextBox" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Width="150" Margin="10"  Visibility="{Binding TWFModeOff}"/>
+        <TextBlock Foreground="Red" Grid.Row="0" Grid.ColumnSpan="2"  FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="45,-7"  Visibility="{Binding TWFModeOff}">
             <TextBlock.Text>
                 <MultiBinding StringFormat="{}{0}">
                     <Binding Path="(Validation.Errors)[0].ErrorContent" ElementName="usernameTextBox" />
@@ -34,9 +35,9 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <Label Grid.Row="2" Grid.Column="0" Content="Password:" Style="{StaticResource Header}"/>
-        <components:BindablePasswordBox x:Name="passwordTextBox"   Password = "{Binding Password}"  Grid.Row="2" Grid.Column="1" Width="150" Margin="10"/>
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="2"  Foreground="Red" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Margin="55,-7">
+        <Label Grid.Row="2" Grid.Column="0" Content="Password:" Style="{StaticResource Header}"  Visibility="{Binding TWFModeOff}"/>
+        <components:BindablePasswordBox x:Name="passwordTextBox"   Password = "{Binding Password}"  Grid.Row="2" Grid.Column="1" Width="150" Margin="10"  Visibility="{Binding TWFModeOff}"/>
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2"  Foreground="Red" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Margin="55,-7"  Visibility="{Binding TWFModeOff}">
             <TextBlock.Text>
                 <MultiBinding StringFormat="{}{0}">
                     <Binding Path="(Validation.Errors)[0].ErrorContent" ElementName="passwordTextBox" />
@@ -44,15 +45,34 @@
             </TextBlock.Text>
         </TextBlock>
 
+        <Label Grid.Row="3" Grid.Column="0" Content="2FA code:" Style="{StaticResource Header}" Visibility="{Binding TWFEnabled}" />
+        <TextBox x:Name="code" Text="{Binding UserTWFCode, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Width="150" Margin="10"  Visibility="{Binding TWFEnabled}"/>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2"  Foreground="Red" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Margin="55,-7"  Visibility="{Binding TWFEnabled}">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0}">
+                    <Binding Path="(Validation.Errors)[0].ErrorContent" ElementName="code" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
 
-        <Button Grid.Row="3" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Login"  
+
+        <Button Grid.Row="4" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Verify code"  
+                Background="LightGray" Padding="5" 
+                Margin="0 20"
+                BorderThickness="0" 
+                Command="{Binding TWFCommand}"
+                 Visibility="{Binding TWFEnabled}"
+                />
+
+        <Button Grid.Row="4" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Login"  
                 Background="LightGray" Padding="5" 
                 Margin="0 20"
                 BorderThickness="0" 
                 Command="{Binding LoginCommand}"
+                 Visibility="{Binding TWFModeOff}"
                 />
 
-        <Button Grid.Row="4" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Forgot your password ?"  
+        <Button Grid.Row="5" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Forgot your password ?"  
              Background="Transparent" Padding="5" 
              Margin="0 20"
              BorderThickness="0" 
@@ -60,8 +80,8 @@
              />
 
 
-        <Label Grid.Row="5" Grid.Column="0"  Content="Don't have an account?" VerticalAlignment="Center"/>
-        <Button Grid.Row="5" 
+        <Label Grid.Row="6" Grid.Column="0"  Content="Don't have an account?" VerticalAlignment="Center"/>
+        <Button Grid.Row="6" 
                  Grid.Column="1"
                  Height="30" 
                  Margin="0 30 0 30"
