@@ -14,7 +14,7 @@ namespace FITTRACK.ViewModels;
 
 public class AddWorkoutWindowViewMode : ViewModelBase
 {
-    private InMemoryDataService _dataService;
+    private IDataService _dataService;
     private DateTime _date = DateTime.Now;
     private Duration _timeSpan;
     private int _caloriesBurned;
@@ -102,12 +102,12 @@ public class AddWorkoutWindowViewMode : ViewModelBase
     {
         WorkoutTypes = new ObservableCollection<WorkoutType> { WorkoutType.Cardio, WorkoutType.Strength };
         AddWorkoutCommand = new RelayCommand(execute: addNewWorkout, canExecute: e => true);
-        _dataService = (InMemoryDataService)dataService;
+        _dataService = dataService;
         PastTemplateCommand = new RelayCommand(execute: setWorkoutTemplate, canExecute: e =>
         {
-            if (_dataService.AuthenticatedUser is not null)
+            if (_dataService.GetAuthenticatedUser() is not null)
             {
-                return _dataService.AuthenticatedUser.WorkoutAsTemplate is not null;
+                return _dataService.GetAuthenticatedUser().WorkoutAsTemplate is not null;
             }
 
             return false;
@@ -116,7 +116,7 @@ public class AddWorkoutWindowViewMode : ViewModelBase
 
     private void setWorkoutTemplate(object obj)
     {
-        var workoutTemplate = _dataService.AuthenticatedUser.WorkoutAsTemplate;
+        var workoutTemplate = _dataService.GetAuthenticatedUser().WorkoutAsTemplate;
         Date = workoutTemplate.Date.Date;
         Notes = workoutTemplate.Notes;
         CaloriesBurned = workoutTemplate.CaloriesBurned;
@@ -144,7 +144,7 @@ public class AddWorkoutWindowViewMode : ViewModelBase
         workout.CaloriesBurned = CaloriesBurned;
         workout.TimeSpan = new TimeSpan(hours: Hours, minutes: Minutes, seconds: Seconds);
 
-        _dataService.AuthenticatedUser.AddWorkout(workout);
+        _dataService.GetAuthenticatedUser().AddWorkout(workout);
 
         Window addWorkoutWindow = (AddWorkoutWindowView)obj;
         addWorkoutWindow.Close();

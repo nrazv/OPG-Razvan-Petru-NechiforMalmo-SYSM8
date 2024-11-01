@@ -7,7 +7,7 @@ namespace FITTRACK.Data;
 
 public class DataContext
 {
-    private readonly Dictionary<Guid, User> _userDataContext = new();
+    private Dictionary<Guid, User> _userDataContext = new();
     private readonly List<SecurityQuestion> _securityQuestions = new();
     private List<string> _conutriesList;
     public List<string> CountriesList { get => _conutriesList; }

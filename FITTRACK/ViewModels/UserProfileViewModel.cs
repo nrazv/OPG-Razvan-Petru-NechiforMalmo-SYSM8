@@ -19,7 +19,7 @@ namespace FITTRACK.ViewModels;
 public class UserProfileViewModel : ViewModelBase
 {
     private User _authenticatedUser;
-    private InMemoryDataService _dataService;
+    private IDataService _dataService;
     public ObservableCollection<string> Countries { get; }
 
     private string _userName = string.Empty;
@@ -117,8 +117,8 @@ public class UserProfileViewModel : ViewModelBase
 
     public UserProfileViewModel(IDataService dataService)
     {
-        _dataService = (InMemoryDataService)dataService;
-        _authenticatedUser = _dataService.AuthenticatedUser;
+        _dataService = dataService;
+        _authenticatedUser = _dataService.GetAuthenticatedUser();
         Countries = new ObservableCollection<string>(_dataService.Countries());
         setUserData();
         EnableEditCommand = new RelayCommand(execute: e => enableEditMode(), canExecute: e => true);
@@ -228,7 +228,7 @@ public class UserProfileViewModel : ViewModelBase
 
     internal void UpdateData()
     {
-        _authenticatedUser = _dataService.AuthenticatedUser;
+        _authenticatedUser = _dataService.GetAuthenticatedUser();
         UserName = AuthenticatedUser.UserName;
     }
 }

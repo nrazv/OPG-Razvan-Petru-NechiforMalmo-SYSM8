@@ -22,13 +22,11 @@ namespace FITTRACK.Views
     {
 
 
-
         public AboutPage()
         {
             InitializeComponent();
         }
 
-        public string info = "";
 
     }
 }

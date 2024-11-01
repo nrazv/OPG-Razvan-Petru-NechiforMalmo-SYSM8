@@ -14,7 +14,7 @@ namespace FITTRACK.ViewModels;
 
 class AdminWorkoutsViewModel : ViewModelBase
 {
-    InMemoryDataService dataService;
+    IDataService _dataService;
 
     private AdminWorkout _selectedWorkout;
     public ObservableCollection<AdminWorkout> Workouts { get; set; }
@@ -32,7 +32,7 @@ class AdminWorkoutsViewModel : ViewModelBase
 
     public AdminWorkoutsViewModel(IDataService dataService)
     {
-        this.dataService = (InMemoryDataService)dataService;
+        _dataService = dataService;
         setWorkouts();
 
         DeleteWorkoutCommand = new RelayCommand(execute: deleteWorkout, canExecute: e => SelectedWorkout is not null);
@@ -41,7 +41,7 @@ class AdminWorkoutsViewModel : ViewModelBase
     private void setWorkouts()
     {
         Workouts = new ObservableCollection<AdminWorkout>();
-        foreach (User user in dataService.AllUsers())
+        foreach (User user in _dataService.AllUsers())
         {
             if (user is Admin)
             {
@@ -52,7 +52,7 @@ class AdminWorkoutsViewModel : ViewModelBase
             {
                 AdminWorkout adminWorkout = new AdminWorkout();
                 adminWorkout.WorkoutType = work.WorkoutType;
-                adminWorkout.WorkoutOwner = user.UserName;
+                adminWorkout.WorkoutOwnerId = user.Id;
                 adminWorkout.CaloriesBurned = work.CaloriesBurned;
                 adminWorkout.Date = work.Date;
                 adminWorkout.Id = work.Id;
@@ -74,9 +74,7 @@ class AdminWorkoutsViewModel : ViewModelBase
 
         if (result is MessageBoxResult.Yes)
         {
-            Workout workout = (Workout)SelectedWorkout;
-
-            dataService.DeleteUserWorkout(workout, SelectedWorkout.WorkoutOwner);
+            _dataService.DeleteUserWorkout(SelectedWorkout.Id, SelectedWorkout.WorkoutOwnerId);
             Workouts.Remove(SelectedWorkout);
             SelectedWorkout = null;
         }

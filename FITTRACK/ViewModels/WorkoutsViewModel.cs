@@ -12,7 +12,7 @@ namespace FITTRACK.ViewModels;
 
 public class WorkoutsViewModel : ViewModelBase, INotifyDataErrorInfo
 {
-    private InMemoryDataService _dataService;
+    private IDataService _dataService;
     private INavigationService _navigationService;
     private User _authenticatedUser;
     private Workout _selectedWorkout;
@@ -143,7 +143,7 @@ public class WorkoutsViewModel : ViewModelBase, INotifyDataErrorInfo
     public WorkoutsViewModel(INavigationService navigationService, IDataService dataService)
     {
         NavigationService = navigationService;
-        _dataService = (InMemoryDataService)dataService;
+        _dataService = dataService;
         setAuthenticatedUser();
         setWorkouts();
         createCommands();
@@ -265,7 +265,7 @@ public class WorkoutsViewModel : ViewModelBase, INotifyDataErrorInfo
     // set data for the current authenticated user
     private void setAuthenticatedUser()
     {
-        AuthenticatedUser = _dataService.AuthenticatedUser;
+        AuthenticatedUser = _dataService.GetAuthenticatedUser();
         AuthenticatedUser.Workouts.CollectionChanged += OnWorkoutsCollectionChanged;
         UserInfo = AuthenticatedUser.UserName;
     }

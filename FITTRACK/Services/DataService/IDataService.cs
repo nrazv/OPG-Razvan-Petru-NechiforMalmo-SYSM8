@@ -13,7 +13,7 @@ public interface IDataService
     public List<string> Countries();
     public User UpdateUser(User user);
     public List<User> AllUsers();
-
-    public void DeleteUserWorkout(Workout workout, string userName);
+    public User GetAuthenticatedUser();
+    public void DeleteUserWorkout(Guid workoutId, Guid userId);
 
 }

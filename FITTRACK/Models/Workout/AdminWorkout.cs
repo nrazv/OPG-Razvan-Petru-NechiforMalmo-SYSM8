@@ -8,5 +8,5 @@ namespace FITTRACK.Models;
 
 class AdminWorkout : Workout
 {
-    public string WorkoutOwner { get; set; }
+    public Guid WorkoutOwnerId { get; set; }
 }

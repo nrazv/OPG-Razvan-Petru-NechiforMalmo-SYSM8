@@ -15,10 +15,10 @@ public class InMemoryDataService : IDataService
     private User _authenticatedUser;
     public User AuthenticatedUser { get => _authenticatedUser; set => _authenticatedUser = value; }
 
-    public InMemoryDataService(DataContext context, INavigationService navigationService)
+    public InMemoryDataService(INavigationService navigationService)
     {
         _navigationService = navigationService;
-        _context = context;
+        _context = new DataContext();
     }
 
     public bool AddUser(User person)
@@ -106,10 +106,16 @@ public class InMemoryDataService : IDataService
         return users;
     }
 
-    public void DeleteUserWorkout(Workout workout, string userName)
+    public void DeleteUserWorkout(Guid workoutId, Guid userId)
     {
-        _context.Users.Where(u => u.Value.UserName == userName).First().Value.DeleteWorkout(workout);
+        var user = _context.Users[userId];
+        Workout workoutToDelete = user.Workouts.AsEnumerable().Where(workout => workout.Id == workout.Id).FirstOrDefault();
+        user.Workouts.Remove(workoutToDelete);
     }
 
+    public User GetAuthenticatedUser()
+    {
+        return AuthenticatedUser;
+    }
 }
 

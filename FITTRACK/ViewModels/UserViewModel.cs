@@ -15,7 +15,7 @@ namespace FITTRACK.ViewModels;
 public class UserViewModel : ViewModelBase
 {
     private INavigationService _navigationService;
-    private InMemoryDataService _dataService;
+    private IDataService _dataService;
 
     public INavigationService NavigationService
     {
@@ -35,7 +35,7 @@ public class UserViewModel : ViewModelBase
     public UserViewModel(INavigationService navigationService, IDataService dataService)
     {
         NavigationService = navigationService;
-        _dataService = (InMemoryDataService)dataService;
+        _dataService = dataService;
         createNavigationCommands();
     }
 
@@ -58,7 +58,7 @@ public class UserViewModel : ViewModelBase
     // set's the view for the user or admin 
     public void setView()
     {
-        if (_dataService.AuthenticatedUser is Admin)
+        if (_dataService.GetAuthenticatedUser() is Admin)
         {
             setAdminView();
         }
