@@ -240,12 +240,15 @@ public class WorkoutsViewModel : ViewModelBase, INotifyDataErrorInfo
         }
     }
 
+    // needed to clear data when a new user logs in 
     public void UpdateData()
     {
         setAuthenticatedUser();
         setWorkouts();
     }
 
+
+    // save changes made to workout
     private void saveWorkoutChanges(object obj)
     {
         var workoutToUpdate = AuthenticatedUser.Workouts.
@@ -259,6 +262,7 @@ public class WorkoutsViewModel : ViewModelBase, INotifyDataErrorInfo
         EditWorkoutVisibility = Visibility.Visible;
     }
 
+    // set data for the current authenticated user
     private void setAuthenticatedUser()
     {
         AuthenticatedUser = _dataService.AuthenticatedUser;
@@ -266,6 +270,7 @@ public class WorkoutsViewModel : ViewModelBase, INotifyDataErrorInfo
         UserInfo = AuthenticatedUser.UserName;
     }
 
+    // sets the workout as a template for "för att kunna kopiera ett träningspass som mall" 
     private void setWorkoutTemplate(object obj)
     {
         AuthenticatedUser.WorkoutAsTemplate = SelectedWorkout;

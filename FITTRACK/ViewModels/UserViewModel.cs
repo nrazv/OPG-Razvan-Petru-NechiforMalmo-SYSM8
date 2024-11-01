@@ -53,6 +53,9 @@ public class UserViewModel : ViewModelBase
         NavigationService.NavigateTo<SignInViewModel>();
     }
 
+
+
+    // set's the view for the user or admin 
     public void setView()
     {
         if (_dataService.AuthenticatedUser is Admin)

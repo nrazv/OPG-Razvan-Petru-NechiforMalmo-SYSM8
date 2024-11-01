@@ -135,8 +135,10 @@ public class SignUpViewModel : ViewModelBase, INotifyDataErrorInfo
         }
     }
 
+    // Custom implemantation of validate method of INotifyDataErrorInfo
     public new void Validate(string propertyName, object propertyValue)
     {
+        // validate properties and add errors to Errors list
         var results = new List<ValidationResult>();
         Validator.TryValidateProperty(propertyValue, new ValidationContext(this) { MemberName = propertyName }, results);
 
@@ -145,6 +147,7 @@ public class SignUpViewModel : ViewModelBase, INotifyDataErrorInfo
             var errors = new List<string>();
             results.ForEach(x => errors.Add(x.ErrorMessage ?? ""));
 
+            // update errors for properties in Errors list 
             if (Errors.ContainsKey(propertyName))
             {
                 Errors[propertyName] = errors;
@@ -161,16 +164,18 @@ public class SignUpViewModel : ViewModelBase, INotifyDataErrorInfo
         }
         else
         {
+            // implement passwords match 
             if (propertyName.Equals("PasswordConfirmation"))
             {
                 bool passwordMatch = Password.Equals(propertyValue);
-
+                // remove errors of type PasswordConfirmation
                 if (passwordMatch)
                 {
                     Errors.Remove(propertyName);
                     ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
                 }
 
+                // add errors to password PasswordConfirmation
                 if (!passwordMatch)
                 {
                     Errors[propertyName] = new List<string>() { "Passwords do not match" };
@@ -184,6 +189,7 @@ public class SignUpViewModel : ViewModelBase, INotifyDataErrorInfo
         }
         OnPropertyChanged(nameof(Errors));
     }
+
 
     private bool canSignUp(object obj)
     {
@@ -223,6 +229,7 @@ public class SignUpViewModel : ViewModelBase, INotifyDataErrorInfo
         }
     }
 
+    // clear fields data and errors
     private void clearFormData()
     {
         UserName = string.Empty;

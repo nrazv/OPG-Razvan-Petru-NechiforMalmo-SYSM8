@@ -3,6 +3,7 @@ using FITTRACK.Models;
 using FITTRACK.MVVM;
 using FITTRACK.Services.DataService;
 using FITTRACK.Services.Navigation;
+using FITTRACK.Views;
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -67,6 +68,7 @@ public class SignInViewModel : ViewModelBase
     public RelayCommand LoginCommand { get; set; }
     public RelayCommand ForgotPasswordCommand { get; set; }
     public RelayCommand TWFCommand { get; set; }
+    public RelayCommand OpenAboutPage { get; set; }
 
 
     public string UserName
@@ -109,6 +111,11 @@ public class SignInViewModel : ViewModelBase
         LoginCommand = _createLoginCommand();
         ForgotPasswordCommand = _createForgotPasswordCommand();
         TWFCommand = new RelayCommand(execute: e => { verify2WF(); }, canExecute: e => true);
+        OpenAboutPage = new RelayCommand(execute: e =>
+        {
+            new AboutPage().Show();
+
+        }, canExecute: e => true);
     }
 
     private void _login()
@@ -182,6 +189,7 @@ public class SignInViewModel : ViewModelBase
         displayCode(TWFCode);
     }
 
+    // check if 2FA codes match 
     private void verify2WF()
     {
         if (UserTWFCode == TWFCode)
@@ -202,7 +210,7 @@ public class SignInViewModel : ViewModelBase
     }
 
 
-
+    // open a small window with the 2FA code
     private void displayCode(int twfCode)
     {
         string messageBoxText = $"2FA Code: {twfCode}";
@@ -211,6 +219,8 @@ public class SignInViewModel : ViewModelBase
         MessageBoxResult result = MessageBox.Show(messageBoxText, caption);
     }
 
+
+    // generate a random 2FA code 
     private int generateCode()
     {
         Random random = new Random();

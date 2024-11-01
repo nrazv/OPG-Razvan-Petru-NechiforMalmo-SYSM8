@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FITTRACK.MVVM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,20 +11,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace FITTRACK.Views
 {
     /// <summary>
-    /// Interaction logic for SigninView.xaml
+    /// Interaction logic for AboutPage.xaml
     /// </summary>
-    public partial class SigninView : UserControl
+    public partial class AboutPage : Window
     {
-        public SigninView()
+
+
+
+        public AboutPage()
         {
             InitializeComponent();
         }
+
+        public string info = "";
 
     }
 }

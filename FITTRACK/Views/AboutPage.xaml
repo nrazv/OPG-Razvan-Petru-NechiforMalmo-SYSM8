@@ -1,0 +1,22 @@
+﻿<Window x:Class="FITTRACK.Views.AboutPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FITTRACK.Views"
+        mc:Ignorable="d"
+        Title="AboutPage" Height="450" Width="800">
+    <Grid>
+
+        <Label Grid.Row="0"  Grid.ColumnSpan="2" Content="Fit - Track" FontFamily="Arial" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" Margin="20"/>
+
+
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontFamily="Arial"
+            FontSize="18"
+            Text="FitTrack Pro is a comprehensive fitness tracking app designed to help users achieve their health and wellness goals. With an intuitive interface, the app allows users to log workouts, track nutrition, and monitor progress over time." IsEnabled="False"  Width="460" TextWrapping="Wrap" Height="205" Margin="0,191,0,0"/>
+
+    </Grid>
+</Window>

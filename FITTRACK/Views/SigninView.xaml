@@ -15,6 +15,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -92,6 +93,13 @@
                  FontSize="18"
                  Command="{Binding NavigateToSignUp}"
                  />
+
+        <Button Grid.Row="7" Grid.ColumnSpan="2"  FontSize="15" FontWeight="Bold" Content="Info Page"  
+             Background="Transparent" Padding="5" 
+             Margin="0 20"
+             BorderThickness="0" 
+             Command="{Binding OpenAboutPage}"
+             />
 
     </Grid>
 </UserControl>
